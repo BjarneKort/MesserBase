@@ -19,6 +19,18 @@
         .filter-input-wrapper { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
         .filter-input-wrapper label { font-size: 12px; font-weight: bold; color: #e6e9ee; }
         .filter-input-wrapper input { padding: 8px 10px; border: 1px solid #3a414d; border-radius: 6px; font-size: 14px; min-width: 0; background: #11151b; color: #fff; }
+        .date-filter { max-width: 600px; }
+        .date-filter-heading { font-size: 14px; font-weight: bold; }
+        .date-range { position: relative; height: 28px; margin: 8px 10px 0; }
+        .date-range-track { position: absolute; top: 11px; left: 0; right: 0; height: 6px; border-radius: 3px; background: #3a414d; }
+        .date-range-selection { position: absolute; top: 11px; height: 6px; border-radius: 3px; background: #7aa7ff; }
+        .filter-section .date-range input { appearance: none; position: absolute; top: 0; left: 0; width: 100%; height: 28px; margin: 0; padding: 0; min-width: 0; border: 0; background: transparent; pointer-events: none; }
+        .date-range input::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; background: #7aa7ff; cursor: pointer; pointer-events: auto; }
+        .date-range input::-moz-range-thumb { width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; background: #7aa7ff; cursor: pointer; pointer-events: auto; }
+        .date-range input:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+        .date-range input:focus { z-index: 1; }
+        .date-range-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+        .date-filter-help { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
         .toggle-wrapper { display: flex; align-items: center; gap: 8px; padding-bottom: 10px; font-size: 14px; font-weight: bold; color: #e6e9ee; white-space: nowrap; }
         .toggle-wrapper input { flex: none; min-width: 0; width: 18px; height: 18px; padding: 0; cursor: pointer; }
         .toggle-wrapper label { cursor: pointer; }
@@ -102,6 +114,17 @@
                     </div>
                 </div>
             </div>
+            <div class="date-filter">
+                <div class="date-filter-heading">Date range: <span id="dateRangeValue">1350 - 1650</span></div>
+                <div class="date-range">
+                    <div class="date-range-track"></div>
+                    <div class="date-range-selection" id="dateRangeSelection"></div>
+                    <input type="range" id="dateMin" min="1350" max="1650" value="1350" step="1" aria-label="Earliest year" aria-describedby="dateFilterHelp">
+                    <input type="range" id="dateMax" min="1350" max="1650" value="1650" step="1" aria-label="Latest year" aria-describedby="dateFilterHelp">
+                </div>
+                <div class="date-range-labels"><span>1350</span><span>1650</span></div>
+                <p class="date-filter-help" id="dateFilterHelp">Select overlapping date ranges. Records without year bounds are shown only when the full range is selected.</p>
+            </div>
             <div class="toggle-wrapper">
                 <input type="checkbox" id="detailedOnly">
                 <label for="detailedOnly">With detailed data only</label>
@@ -153,6 +176,10 @@
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
         const originFilter = document.getElementById('originFilter');
+        const dateMin = document.getElementById('dateMin');
+        const dateMax = document.getElementById('dateMax');
+        const dateRangeValue = document.getElementById('dateRangeValue');
+        const dateRangeSelection = document.getElementById('dateRangeSelection');
         const weightMin = document.getElementById('weightMin');
         const weightMax = document.getElementById('weightMax');
         const bladeLengthMin = document.getElementById('bladeLengthMin');
@@ -164,6 +191,8 @@
         searchInput.addEventListener('input', filterObjects);
         categoryFilter.addEventListener('change', filterObjects);
         originFilter.addEventListener('change', filterObjects);
+        dateMin.addEventListener('input', () => updateDateRange(dateMin));
+        dateMax.addEventListener('input', () => updateDateRange(dateMax));
         weightMin.addEventListener('input', filterObjects);
         weightMax.addEventListener('input', filterObjects);
         bladeLengthMin.addEventListener('input', filterObjects);
@@ -188,6 +217,20 @@
         function getRegionalOrigin(obj) {
             return typeof obj.regionalorigin === 'string' && obj.regionalorigin.trim() ? obj.regionalorigin.trim() : 'Unknown';
         }
+
+        function updateDateRange(changed) {
+            if (Number(dateMin.value) > Number(dateMax.value)) {
+                if (changed === dateMin) dateMin.value = dateMax.value;
+                else dateMax.value = dateMin.value;
+            }
+            const min = Number(dateMin.value), max = Number(dateMax.value);
+            dateRangeValue.textContent = `${min} - ${max}`;
+            dateRangeSelection.style.left = `${(min - 1350) / 300 * 100}%`;
+            dateRangeSelection.style.width = `${(max - min) / 300 * 100}%`;
+            filterObjects();
+        }
+
+        updateDateRange();
 
         function updateCounter(shown) {
             const total = allObjects.length;
@@ -218,6 +261,8 @@
             const keyword = searchInput.value.toLowerCase();
             const category = categoryFilter.value;
             const origin = originFilter.value;
+            const minYear = Number(dateMin.value), maxYear = Number(dateMax.value);
+            const dateFilterActive = minYear !== 1350 || maxYear !== 1650;
             const minWeight = weightMin.value ? parseInt(weightMin.value) : null;
             const maxWeight = weightMax.value ? parseInt(weightMax.value) : null;
             const minBladeLength = bladeLengthMin.value ? parseFloat(bladeLengthMin.value) : null;
@@ -228,6 +273,9 @@
                 const matchesKeyword = String(obj.name || '').toLowerCase().includes(keyword) || String(obj.description || '').toLowerCase().includes(keyword) || regionalOrigin.toLowerCase().includes(keyword);
                 const matchesCategory = !category || obj.category === category;
                 const matchesOrigin = !origin || regionalOrigin === origin;
+                const matchesDate = !dateFilterActive ||
+                    (Number.isInteger(obj.dateearliest) && Number.isInteger(obj.datelatest) &&
+                     obj.dateearliest <= obj.datelatest && obj.dateearliest <= maxYear && obj.datelatest >= minYear);
 
                 let matchesWeight = true;
                 if (minWeight !== null || maxWeight !== null) {
@@ -253,7 +301,7 @@
 
                 const matchesDetailed = !detailedOnly.checked || countDimensionValues(obj) >= 3;
 
-                return matchesKeyword && matchesCategory && matchesOrigin && matchesWeight && matchesBladeLength && matchesDetailed;
+                return matchesKeyword && matchesCategory && matchesOrigin && matchesDate && matchesWeight && matchesBladeLength && matchesDetailed;
             }));
         }
 
@@ -287,10 +335,11 @@
                 ['altname', 'Alternate Name'],
                 ['category', 'Category'],
                 ['type', 'Type'],
-                ['date', 'Date'],
+                ['daterange', 'Date'],
+                ['date', 'Original Date'],
                 ['regionalorigin', 'Regional Origin'],
                 ['currentlocation', 'Current Location']
-            ], { ...obj, regionalorigin: getRegionalOrigin(obj) });
+            ], { ...obj, daterange: Number.isInteger(obj.dateearliest) && Number.isInteger(obj.datelatest) && obj.dateearliest <= obj.datelatest ? `${obj.dateearliest} - ${obj.datelatest}` : 'Unknown', regionalorigin: getRegionalOrigin(obj) });
 
             appendRows(body.querySelector('.dimensions-table'), [
                 ['weight', 'Weight'],

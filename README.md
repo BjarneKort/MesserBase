@@ -1,6 +1,18 @@
 # MesserBase
 Citizen science project to create a database of Late Medieval Personal Defence Weapons known as Messer. From Bauernwehr to Kriegsmesser. - still under construction
 
+## Dates
+
+`dateearliest` and `datelatest` are inclusive integer year bounds. Use `null`
+for both when a source does not specify a defensible range. Keep the original
+date wording in `date`, including any uncertainty. Century-only dates are
+represented as 1401-1500 for the 15th century and 1501-1600 for the 16th.
+
+The date slider spans 1350-1650. When narrowed, it includes objects whose
+known bounds overlap the selected range, including its endpoints. Objects with
+unknown bounds are omitted while narrowed; selecting the full slider range
+shows all dates, including unknown dates.
+
 ## Regional origin
 
 Set `regionalorigin` in `database.json` to one of the values below. Use
