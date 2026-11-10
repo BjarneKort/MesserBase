@@ -76,6 +76,9 @@
                     <option value="Langes Messer">Langes Messer</option>
                     <option value="Grosses Messer">Grosses Messer</option>
                 </select>
+                <select id="originFilter" aria-label="Regional origin">
+                    <option value="">All Regional Origins</option>
+                </select>
             </div>
             <div class="filter-row">
                 <div class="filter-group">
@@ -149,6 +152,7 @@
         const objectCounter = document.getElementById('objectCounter');
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
+        const originFilter = document.getElementById('originFilter');
         const weightMin = document.getElementById('weightMin');
         const weightMax = document.getElementById('weightMax');
         const bladeLengthMin = document.getElementById('bladeLengthMin');
@@ -159,6 +163,7 @@
 
         searchInput.addEventListener('input', filterObjects);
         categoryFilter.addEventListener('change', filterObjects);
+        originFilter.addEventListener('change', filterObjects);
         weightMin.addEventListener('input', filterObjects);
         weightMax.addEventListener('input', filterObjects);
         bladeLengthMin.addEventListener('input', filterObjects);
@@ -168,7 +173,21 @@
         grid.addEventListener('click', e => { const card = e.target.closest('.card'); if (card) openModal(Number(card.dataset.id)); });
         grid.addEventListener('keydown', e => { const card = e.target.closest('.card'); if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openModal(Number(card.dataset.id)); } });
 
-        fetch('database.json').then(res => { if (!res.ok) throw new Error('Failed to load data'); return res.json(); }).then(data => { allObjects = Array.isArray(data) ? data : []; renderGrid(allObjects); }).catch(err => { grid.innerHTML = `<p style="color:#ffb3b3;text-align:center;width:100%;">${err.message}</p>`; updateCounter(0); });
+        fetch('database.json').then(res => { if (!res.ok) throw new Error('Failed to load data'); return res.json(); }).then(data => {
+            allObjects = Array.isArray(data) ? data : [];
+            const origins = [...new Set(allObjects.map(getRegionalOrigin))].sort((a, b) => a.localeCompare(b));
+            origins.forEach(origin => {
+                const option = document.createElement('option');
+                option.value = origin;
+                option.textContent = origin;
+                originFilter.appendChild(option);
+            });
+            filterObjects();
+        }).catch(err => { grid.innerHTML = `<p style="color:#ffb3b3;text-align:center;width:100%;">${err.message}</p>`; updateCounter(0); });
+
+        function getRegionalOrigin(obj) {
+            return typeof obj.regionalorigin === 'string' && obj.regionalorigin.trim() ? obj.regionalorigin.trim() : 'Unknown';
+        }
 
         function updateCounter(shown) {
             const total = allObjects.length;
@@ -198,14 +217,17 @@
         function filterObjects() {
             const keyword = searchInput.value.toLowerCase();
             const category = categoryFilter.value;
+            const origin = originFilter.value;
             const minWeight = weightMin.value ? parseInt(weightMin.value) : null;
             const maxWeight = weightMax.value ? parseInt(weightMax.value) : null;
             const minBladeLength = bladeLengthMin.value ? parseFloat(bladeLengthMin.value) : null;
             const maxBladeLength = bladeLengthMax.value ? parseFloat(bladeLengthMax.value) : null;
 
             renderGrid(allObjects.filter(obj => {
-                const matchesKeyword = String(obj.name || '').toLowerCase().includes(keyword) || String(obj.description || '').toLowerCase().includes(keyword);
+                const regionalOrigin = getRegionalOrigin(obj);
+                const matchesKeyword = String(obj.name || '').toLowerCase().includes(keyword) || String(obj.description || '').toLowerCase().includes(keyword) || regionalOrigin.toLowerCase().includes(keyword);
                 const matchesCategory = !category || obj.category === category;
+                const matchesOrigin = !origin || regionalOrigin === origin;
 
                 let matchesWeight = true;
                 if (minWeight !== null || maxWeight !== null) {
@@ -231,7 +253,7 @@
 
                 const matchesDetailed = !detailedOnly.checked || countDimensionValues(obj) >= 3;
 
-                return matchesKeyword && matchesCategory && matchesWeight && matchesBladeLength && matchesDetailed;
+                return matchesKeyword && matchesCategory && matchesOrigin && matchesWeight && matchesBladeLength && matchesDetailed;
             }));
         }
 
@@ -266,8 +288,9 @@
                 ['category', 'Category'],
                 ['type', 'Type'],
                 ['date', 'Date'],
+                ['regionalorigin', 'Regional Origin'],
                 ['currentlocation', 'Current Location']
-            ], obj);
+            ], { ...obj, regionalorigin: getRegionalOrigin(obj) });
 
             appendRows(body.querySelector('.dimensions-table'), [
                 ['weight', 'Weight'],
