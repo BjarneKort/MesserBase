@@ -5,7 +5,9 @@ Citizen science project to create a database of Late Medieval Personal Defence W
 
 The expandable sections above the filters are defined in `index.html`. Replace
 the placeholder text inside each `.info-content` with the desired text or
-images. Sections open independently and stay open while visitors filter objects.
+images. Their buttons appear in a row on wider screens and wrap on smaller
+screens. Sections open below the buttons, independently of one another, and
+stay open while visitors filter objects.
 
 ## Dates
 

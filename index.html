@@ -12,11 +12,15 @@
         h1 { text-align: center; color: #ffffff; margin-bottom: 10px; font-size: 36px; font-weight: 700; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 2px rgba(0, 0, 0, 0.5); letter-spacing: 0.5px; }
         .subtitle { text-align: center; color: #ffffff; margin-top: 0; margin-bottom: 30px; font-size: 18px; font-weight: 400; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 2px rgba(0, 0, 0, 0.5); }
         .info-sections { display: grid; gap: 10px; margin-bottom: 30px; }
-        .info-sections details { background: #1a1f27; border: 1px solid #3a414d; border-radius: 12px; }
-        .info-sections summary { padding: 15px 20px; cursor: pointer; font-weight: bold; color: var(--text); }
-        .info-sections summary:focus-visible { outline: 2px solid #7aa7ff; outline-offset: 3px; border-radius: 12px; }
-        .info-content { padding: 0 20px 20px; color: var(--muted); line-height: 1.5; }
-        .info-content p { margin: 0; }
+        .info-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        @media (min-width: 768px) { .info-buttons { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        .info-buttons button { padding: 15px; background: #1a1f27; border: 1px solid #3a414d; border-radius: 12px; color: var(--text); font: inherit; font-weight: bold; cursor: pointer; }
+        .info-buttons button[aria-expanded="true"] { border-color: #7aa7ff; }
+        .info-buttons button:focus-visible { outline: 2px solid #7aa7ff; outline-offset: 3px; }
+        .info-content { padding: 20px; background: #1a1f27; border: 1px solid #3a414d; border-radius: 12px; color: var(--muted); line-height: 1.5; }
+        .info-content h2 { margin: 0 0 10px; color: var(--text); font-size: 18px; }
+        .info-content p { margin: 0 0 10px; }
+        .info-content p:last-child { margin-bottom: 0; }
         .info-content img { max-width: 100%; height: auto; }
         .filter-section { background: #1a1f27; padding: 20px; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,0.28); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; }
         .filter-row { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
@@ -87,22 +91,28 @@
         <h1>MesserBase</h1>
         <p class="subtitle">Personal Defense Weapons of the 15th and 16th Centuries</p>
         <div class="info-sections">
-            <details>
-                <summary>About this database</summary>
-                <div class="info-content"><p>Placeholder: information about this database will be added here.</p></div>
-            </details>
-            <details>
-                <summary>Categories</summary>
-                <div class="info-content"><p>Placeholder: information about the categories will be added here.</p></div>
-            </details>
-            <details>
-                <summary>Types</summary>
-                <div class="info-content"><p>Placeholder: information about the types will be added here.</p></div>
-            </details>
-            <details>
-                <summary>How to contribute data</summary>
-                <div class="info-content"><p>Placeholder: instructions for contributing data will be added here.</p></div>
-            </details>
+            <div class="info-buttons">
+                <button type="button" aria-expanded="false" aria-controls="info-about">About this database</button>
+                <button type="button" aria-expanded="false" aria-controls="info-categories">Categories</button>
+                <button type="button" aria-expanded="false" aria-controls="info-types">Types</button>
+                <button type="button" aria-expanded="false" aria-controls="info-contribute">How to contribute data</button>
+            </div>
+            <section class="info-content" id="info-about" aria-labelledby="info-about-heading" hidden>
+                <h2 id="info-about-heading">About this database</h2>
+                <p>Placeholder: information about this database will be added here.</p>
+            </section>
+            <section class="info-content" id="info-categories" aria-labelledby="info-categories-heading" hidden>
+                <h2 id="info-categories-heading">Categories</h2>
+                <p>Placeholder: information about the categories will be added here.</p>
+            </section>
+            <section class="info-content" id="info-types" aria-labelledby="info-types-heading" hidden>
+                <h2 id="info-types-heading">Types</h2>
+                <p>Placeholder: information about the types will be added here.</p>
+            </section>
+            <section class="info-content" id="info-contribute" aria-labelledby="info-contribute-heading" hidden>
+                <h2 id="info-contribute-heading">How to contribute data</h2>
+                <p>Placeholder: instructions for contributing data will be added here.</p>
+            </section>
         </div>
         <div class="filter-section">
             <div class="filter-row">
@@ -169,6 +179,14 @@
         <img id="lightboxImg" alt="">
     </div>
     <script>
+        document.querySelectorAll('.info-buttons button').forEach(button => {
+            button.addEventListener('click', () => {
+                const panel = document.getElementById(button.getAttribute('aria-controls'));
+                panel.hidden = !panel.hidden;
+                button.setAttribute('aria-expanded', String(!panel.hidden));
+            });
+        });
+
         function svgDataUri(svgString) { return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgString); }
         function createFallbackPreview(width = 300, height = 220, bg = '#1b2027', text = 'No image') {
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="100%" height="100%" fill="${bg}"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#c4c9d1" font-family="Segoe UI, Arial, sans-serif" font-size="16">${text}</text></svg>`;
