@@ -1,6 +1,12 @@
 # MesserBase
 Citizen science project to create a database of Late Medieval Personal Defence Weapons known as Messer. From Bauernwehr to Kriegsmesser. - still under construction
 
+## Information sections
+
+The expandable sections above the filters are defined in `index.html`. Replace
+the placeholder text inside each `.info-content` with the desired text or
+images. Sections open independently and stay open while visitors filter objects.
+
 ## Dates
 
 `dateearliest` and `datelatest` are inclusive integer year bounds. Use `null`
