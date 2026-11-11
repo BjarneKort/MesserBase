@@ -11,9 +11,9 @@ stay open while visitors filter objects.
 
 ## Dates
 
-`dateearliest` and `datelatest` are inclusive integer year bounds. Use `null`
-for both when a source does not specify a defensible range. Keep the original
-date wording in `date`, including any uncertainty. Century-only dates are
+`dateearliest` and `datelatest` are inclusive integer year bounds, displayed
+together as **Date**. Use `null` for both when a source does not specify a
+defensible range; the displayed date will be `Unknown`. Century-only dates are
 represented as 1401-1500 for the 15th century and 1501-1600 for the 16th.
 
 The date slider spans 1350-1650. When narrowed, it includes objects whose

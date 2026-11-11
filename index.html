@@ -379,7 +379,6 @@
                 ['category', 'Category'],
                 ['type', 'Type'],
                 ['daterange', 'Date'],
-                ['date', 'Original Date'],
                 ['regionalorigin', 'Regional Origin'],
                 ['currentlocation', 'Current Location']
             ], { ...obj, daterange: Number.isInteger(obj.dateearliest) && Number.isInteger(obj.datelatest) && obj.dateearliest <= obj.datelatest ? `${obj.dateearliest} - ${obj.datelatest}` : 'Unknown', regionalorigin: getRegionalOrigin(obj) });
