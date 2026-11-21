@@ -22,7 +22,12 @@
     "pommelcapdimensions": "3,75 cm x 1,37 cm at widest point",
     "grip": "",
     "description": "Cut-and-thrust Bauernwehr with a trefoil/shamrock-shaped nail. Not unlike modern combat knives.",
-    "photo": [],
+    "photo": [
+      "images/DHM W3479/1 W3479 full.png",
+      "images/DHM W3479/2 W3479 oblique.png",
+      "images/DHM W3479/3 W3479 hilt.png",
+      "images/DHM W3479/4 W3479 tip.png"
+    ],
     "modell3d": "",
     "contributor": "Bjarne Kortmann"
   },
@@ -49,7 +54,15 @@
     "pommelcapdimensions": "5.3 cm x 2.8 cm at widest point",
     "grip": "",
     "description": "Langes Messer with cone shaped nail. Nail not in connection with crossguard, positioned several centimeters below it. Pommel formed of many layers of metal and a thicker endcap.",
-    "photo": [],
+    "photo": [
+      "images/DHM W1829/1 W1829 full.png",
+      "images/DHM W1829/2 W1829 oblique.png",
+      "images/DHM W1829/3 W1829 hilt.png",
+      "images/DHM W1829/4 W1829 nail.png",
+      "images/DHM W1829/5 W1829 rivet.png",
+      "images/DHM W1829/6 W1829 pommel.png",
+      "images/DHM W1829/7 W1829 mark.png"
+    ],
     "modell3d": "",
     "contributor": "Bjarne Kortmann"
   },
@@ -76,7 +89,15 @@
     "pommelcapdimensions": "5.0 cm x 1.0 cm at widest spot",
     "grip": "",
     "description": "Langes Messer with knucklebow and ring instead of a nail. Guard still held in position by rivet that would have been the nail in earlier designs.",
-    "photo": [],
+    "photo": [
+      "images/DHM W2278/1 W2278 full.png",
+      "images/DHM W2278/2 W2278 oblique.png",
+      "images/DHM W2278/3 W2278 hilt.png",
+      "images/DHM W2278/4 W2278 ring.png",
+      "images/DHM W2278/5 W2278 rivet.png",
+      "images/DHM W2278/6 W2278 tip.png",
+      "images/DHM W2278/7 W2278 mark.png"
+    ],
     "modell3d": "",
     "contributor": "Bjarne Kortmann"
   },
@@ -103,7 +124,15 @@
     "pommelcapdimensions": "4.0 cm x 0.84 cm at widest point",
     "grip": "",
     "description": "Messer with dimensions comparable to early longswords, single edged.",
-    "photo": [],
+    "photo": [
+      "images/DHM W4704/1 W4704 full.png",
+      "images/DHM W4704/2 W4704 oblique.png",
+      "images/DHM W4704/3 W4704 hilt.png",
+      "images/DHM W4704/4 W4704 nagel top.png",
+      "images/DHM W4704/5 W4704 nagel bottom.png",
+      "images/DHM W4704/6 W4704 pommel.png",
+      "images/DHM W4704/7 W4704 mark.png"
+    ],
     "modell3d": "",
     "contributor": "Bjarne Kortmann"
   },
