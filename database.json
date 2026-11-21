@@ -33,7 +33,7 @@
   },
   {
     "id": 2,
-    "name": "DHM W1829",
+    "name": "DHM W154",
     "altname": "",
     "category": "Langes Messer",
     "type": "",
@@ -55,13 +55,13 @@
     "grip": "",
     "description": "Langes Messer with cone shaped nail. Nail not in connection with crossguard, positioned several centimeters below it. Pommel formed of many layers of metal and a thicker endcap.",
     "photo": [
-      "images/DHM W1829/1 W1829 full.png",
-      "images/DHM W1829/2 W1829 oblique.png",
-      "images/DHM W1829/3 W1829 hilt.png",
-      "images/DHM W1829/4 W1829 nail.png",
-      "images/DHM W1829/5 W1829 rivet.png",
-      "images/DHM W1829/6 W1829 pommel.png",
-      "images/DHM W1829/7 W1829 mark.png"
+      "images/DHM W154/1 W154 full.png",
+      "images/DHM W154/2 W154 oblique.png",
+      "images/DHM W154/3 W154 hilt.png",
+      "images/DHM W154/4 W154 nail.png",
+      "images/DHM W154/5 W154 rivet.png",
+      "images/DHM W154/6 W154 pommel.png",
+      "images/DHM W154/7 W154 mark.png"
     ],
     "modell3d": "",
     "contributor": "Bjarne Kortmann"
